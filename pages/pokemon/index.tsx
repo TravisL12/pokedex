@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from "../../styles/Home.module.css";
+import styles from "../../styles/PokemonList.module.css";
 
 type TPokemonResults = { results: { name: string; url: string }[] };
 
@@ -13,6 +13,8 @@ const Pokemon: NextPage = () => {
   const fetchPokemon = async () => {
     const resp = await fetch("/api/pokemon/list");
     const { pokemonResult } = await resp.json();
+    console.log(pokemonResult?.results);
+
     setPokemonList(pokemonResult);
   };
 
@@ -29,13 +31,22 @@ const Pokemon: NextPage = () => {
       </Head>
 
       <h1>List of Pokemon</h1>
-      <ul>
-        {pokemonList?.results.map((p) => (
-          <li key={p.name}>
-            <Link href={`/pokemon/${p.name}`}>{p.name}</Link>
-          </li>
-        ))}
-      </ul>
+      <div className={styles["pokemon-list"]}>
+        {pokemonList?.results.map((p) => {
+          const id = p.url
+            .split("/")
+            .filter((x) => x)
+            .slice(-1)[0]; // this is weird
+          return (
+            <div key={p.name} className={styles["pokemon-list__item"]}>
+              <img
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`}
+              />
+              <Link href={`/pokemon/${p.name}`}>{p.name}</Link>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
