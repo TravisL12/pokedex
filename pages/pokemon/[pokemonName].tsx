@@ -37,23 +37,30 @@ const PokemonItem: NextPage = () => {
       </Head>
       <Link href="/pokemon">Back to Pokemon List</Link>
       <h1>{pokemonName}: All Info</h1>
-      <div>
-        <strong>Stats</strong>
-        <ul>
-          {pokemonInfo?.stats.map((stat: any) => (
-            <li key={stat.stat.name}>
-              {stat.stat.name}: {stat.base_stat}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <strong>Moves</strong>
-        <ul>
-          {pokemonInfo?.moves.map((move: any) => (
-            <li key={move.move.name}>{move.move.name}</li>
-          ))}
-        </ul>
+      <div style={{ display: "flex" }}>
+        <div>
+          <img
+            src={pokemonInfo?.sprites.other["official-artwork"].front_default}
+          />
+        </div>
+        <div>
+          <strong>Stats</strong>
+          <ul>
+            {pokemonInfo?.stats.map((stat: any) => (
+              <li key={stat.stat.name}>
+                {stat.stat.name}: {stat.base_stat}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <strong>Moves</strong>
+          <ul>
+            {pokemonInfo?.moves.map((move: any) => (
+              <li key={move.move.name}>{move.move.name}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
