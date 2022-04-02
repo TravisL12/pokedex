@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import styles from "../../styles/PokemonList.module.css";
+import styles from "../../styles/PokemonList.module.scss";
 
 const PokemonItem: NextPage = () => {
   const [pokemonInfo, setPokemonInfo] = useState<any>();

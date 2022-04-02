@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from "../../styles/PokemonList.module.css";
+import styles from "../../styles/PokemonList.module.scss";
 
 type TPokemonResults = { results: { name: string; url: string }[] };
 
@@ -38,12 +38,14 @@ const Pokemon: NextPage = () => {
             .filter((x) => x)
             .slice(-1)[0]; // this is weird
           return (
-            <div key={p.name} className={styles["pokemon-list__item"]}>
-              <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`}
-              />
-              <Link href={`/pokemon/${p.name}`}>{p.name}</Link>
-            </div>
+            <Link href={`/pokemon/${p.name}`}>
+              <div key={p.name} className={styles["pokemon-list__item"]}>
+                <img
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`}
+                />
+                <span>{p.name}</span>
+              </div>
+            </Link>
           );
         })}
       </div>
