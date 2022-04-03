@@ -4,23 +4,29 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../../styles/PokemonList.module.scss";
 
-type TPokemonResults = { results: { name: string; url: string }[] };
+type TPokemonResults = {
+  count?: number;
+  results: { name: string; imageUrl: string }[];
+};
+const LIMIT = 100;
 
 const Pokemon: NextPage = () => {
+  const [page, setPage] = useState<number>(0);
   const [pokemonList, setPokemonList] = useState<TPokemonResults>({
     results: [],
   });
-  const fetchPokemon = async () => {
-    const resp = await fetch("/api/pokemon/list");
-    const { pokemonResult } = await resp.json();
-    console.log(pokemonResult?.results);
 
+  const fetchPokemon = async () => {
+    const resp = await fetch(
+      `/api/pokemon/list/?limit=${LIMIT}&offset=${LIMIT * page}`
+    );
+    const { pokemonResult } = await resp.json();
     setPokemonList(pokemonResult);
   };
 
   useEffect(() => {
     fetchPokemon();
-  }, []);
+  }, [page]);
 
   return (
     <div className={styles.container}>
@@ -31,18 +37,20 @@ const Pokemon: NextPage = () => {
       </Head>
 
       <h1>List of Pokemon</h1>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <button onClick={() => setPage(page - 1)} disabled={page === 0}>
+          Prev
+        </button>
+        <button onClick={() => setPage(page + 1)}>Next</button>
+        <span>Page: {page + 1}</span>
+        <span>Total: {pokemonList?.count}</span>
+      </div>
       <div className={styles["pokemon-list"]}>
         {pokemonList?.results.map((p) => {
-          const id = p.url
-            .split("/")
-            .filter((x) => x)
-            .slice(-1)[0]; // this is weird
           return (
-            <Link href={`/pokemon/${p.name}`}>
-              <div key={p.name} className={styles["pokemon-list__item"]}>
-                <img
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`}
-                />
+            <Link key={p.name} href={`/pokemon/${p.name}`}>
+              <div className={styles["pokemon-list__item"]}>
+                <img src={p.imageUrl} />
                 <span>{p.name}</span>
               </div>
             </Link>
